@@ -11,30 +11,81 @@
 
 		
 
-		<config-description>
+		<channels>
+			<channel id="tempIndoor" typeId="temperature">
+				<label>Indoor Temp</label>
+			</channel>
+			<channel typeId="humidity" id="humidityIndoor">
+                <label>Indoor Humidity</label>
+            </channel>
+            <channel typeId="tmode" id="tmode"></channel>
+            <channel typeId="fmode" id="fmode"></channel>
+            <channel typeId="onOff" id="override">
+                <label>Override</label>
+            </channel>
+            <channel typeId="onOff" id="hold">
+                <label>Hold</label>
+            </channel>
+            <channel id="t_heat" typeId="temperature">
+                <label>Temp Target</label>
+            </channel>
+		</channels><config-description>
 			<parameter name="ipAddress" type="text" required="true">
 				<label>IP Address</label>
 				<description>IP Address or hostname of the thermostat</description>
 			</parameter>
 		</config-description>
 
-	</thing-type><!--Indoor-->
-	<channel-group-type id="indoor">
-		<label>Indoor</label>
-	<channels>
-			<channel id="tempIndoor" typeId="temperature"></channel>
-			<channel typeId="humidity" id="humidityIndoor"></channel>
-	</channels></channel-group-type>
+	</thing-type>
 
 	<!--Channel Types-->
 	<channel-type id="temperature">
-		<item-type>Number</item-type>
+		<item-type>Number:Temperature</item-type>
 		<label>Temperature</label>
 		<description>Temperature</description>
+		<state readOnly="true" pattern="%.1f %unit%"></state>
 	</channel-type>
 	<channel-type id="humidity">
-		<item-type>Number</item-type>
+		<item-type>Number:Dimensionless</item-type>
 		<label>Humidity</label>
+		<state readOnly="true" pattern="%.2f %unit%" min="0.0" max="100"></state>
 	</channel-type>
+    <channel-type id="tmode">
+        <item-type>String</item-type>
+        <label>Thermostat Mode</label>
+        <state>
+            <options>
+                <option value="OFF">Off</option>
+                <option value="HEAT">Heat</option>
+                <option value="COOL">Cool</option>
+                <option value="AUTO">Auto</option>
+            </options>
+        </state>
+    </channel-type>
+    <channel-type id="fmode">
+        <item-type>String</item-type>
+        <label>Fan Mode</label>
+        <state>
+            <options>
+                <option value="AUTO">Auto</option>
+                <option value="CIRC">Auto/Circulate</option>
+                <option value="ON">On</option>
+            </options>
+        </state>
+    </channel-type>
+    <channel-type id="onOff">
+        <item-type>String</item-type>
+        <label>On/Off</label>
+        <state>
+            <options>
+                <option value="0">Off</option>
+                <option value="1">On</option>
+            </options>
+        </state>
+    </channel-type>
+    <channel-type id="hold">
+        <item-type>switch</item-type>
+        <label>Hold</label>
+    </channel-type>
 
 </thing:thing-descriptions>
