@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="radiothermostat"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<!--Main Thermostat Thing-->
+	<thing-type id="ct80">
+		<label>RadioThermostat CT80</label>
+		<description>Radio Thermostat CT80 or similar</description>
+
+		
+
+		<config-description>
+			<parameter name="ipAddress" type="text" required="true">
+				<label>IP Address</label>
+				<description>IP Address or hostname of the thermostat</description>
+			</parameter>
+		</config-description>
+
+	</thing-type><!--Indoor-->
+	<channel-group-type id="indoor">
+		<label>Indoor</label>
+	<channels>
+			<channel id="tempIndoor" typeId="temperature"></channel>
+			<channel typeId="humidity" id="humidityIndoor"></channel>
+	</channels></channel-group-type>
+
+	<!--Channel Types-->
+	<channel-type id="temperature">
+		<item-type>Number</item-type>
+		<label>Temperature</label>
+		<description>Temperature</description>
+	</channel-type>
+	<channel-type id="humidity">
+		<item-type>Number</item-type>
+		<label>Humidity</label>
+	</channel-type>
+
+</thing:thing-descriptions>
