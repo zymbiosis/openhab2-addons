@@ -12,7 +12,7 @@
 		
 
 		<channels>
-			<channel id="tempIndoor" typeId="temperature">
+			<channel id="tempIndoor" typeId="temperatureView">
 				<label>Indoor Temp</label>
 			</channel>
 			<channel typeId="humidity" id="humidityIndoor">
@@ -23,11 +23,14 @@
             <channel typeId="onOff" id="override">
                 <label>Override</label>
             </channel>
-            <channel typeId="onOff" id="hold">
+            <channel typeId="hold" id="hold">
                 <label>Hold</label>
             </channel>
             <channel id="t_heat" typeId="temperature">
-                <label>Temp Target</label>
+                <label>Heat Target</label>
+            </channel>
+            <channel id="t_cool" typeId="temperature">
+                <label>Cool Target</label>
             </channel>
 		</channels><config-description>
 			<parameter name="ipAddress" type="text" required="true">
@@ -39,12 +42,18 @@
 	</thing-type>
 
 	<!--Channel Types-->
-	<channel-type id="temperature">
-		<item-type>Number:Temperature</item-type>
-		<label>Temperature</label>
-		<description>Temperature</description>
-		<state readOnly="true" pattern="%.1f %unit%"></state>
-	</channel-type>
+    <channel-type id="temperature">
+        <item-type>Number</item-type>
+        <label>Temperature</label>
+        <description>Temperature</description>
+        <state pattern="%.1f F"></state>
+    </channel-type>
+    <channel-type id="temperatureView">
+        <item-type>Number</item-type>
+        <label>Temperature</label>
+        <description>Temperature</description>
+        <state readOnly="true" pattern="%.1f F"></state>
+    </channel-type>
 	<channel-type id="humidity">
 		<item-type>Number:Dimensionless</item-type>
 		<label>Humidity</label>
@@ -76,7 +85,7 @@
     <channel-type id="onOff">
         <item-type>String</item-type>
         <label>On/Off</label>
-        <state>
+        <state readOnly="true">
             <options>
                 <option value="0">Off</option>
                 <option value="1">On</option>
@@ -84,7 +93,7 @@
         </state>
     </channel-type>
     <channel-type id="hold">
-        <item-type>switch</item-type>
+        <item-type>Switch</item-type>
         <label>Hold</label>
     </channel-type>
 

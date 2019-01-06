@@ -37,6 +37,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -116,8 +117,16 @@ public class RadioThermostatHandler extends BaseThingHandler {
                     post.setEntity(new StringEntity("{\"fmode\" : " + tstat.getFmode().getValue() + "}"));
                     break;
                 case CHANNEL_TARGET_HEAT:
-                    tstat.setT_heat(Double.parseDouble(command.toString()));
-                    post.setEntity(new StringEntity("{\"t_heat\" : " + Double.toString(tstat.getT_heat()) + "}"));
+                    tstat.setT_heat(((DecimalType) command).doubleValue());
+                    post.setEntity(new StringEntity("{\"it_heat\" : " + Double.toString(tstat.getT_heat()) + "}"));
+                    break;
+                case CHANNEL_TARGET_COOL:
+                    tstat.setT_cool(((DecimalType) command).doubleValue());
+                    post.setEntity(new StringEntity("{\"it_cool\" : " + Double.toString(tstat.getT_cool()) + "}"));
+                    break;
+                case CHANNEL_HOLD:
+                    tstat.setHold(command == OnOffType.ON ? 1 : 0);
+                    post.setEntity(new StringEntity("{\"hold\" : " + Integer.toString(tstat.getHold()) + "}"));
                     break;
             }
 
@@ -284,8 +293,12 @@ public class RadioThermostatHandler extends BaseThingHandler {
                     return tstat.getFmode();
                 case CHANNEL_OVERRIDE:
                     return tstat.getOverride();
+                case CHANNEL_HOLD:
+                    return tstat.getHold();
                 case CHANNEL_TARGET_HEAT:
                     return tstat.getT_heat();
+                case CHANNEL_TARGET_COOL:
+                    return tstat.getT_cool();
             }
         }
 
