@@ -15,7 +15,6 @@ package org.openhab.binding.radiothermostat.internal;
 import static org.openhab.binding.radiothermostat.internal.RadioThermostatBindingConstants.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -23,19 +22,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -101,47 +101,56 @@ public class RadioThermostatHandler extends BaseThingHandler {
         // First set the HTTP POST
         URI uri;
         try {
-            HttpClient httpClient = new DefaultHttpClient();
+            HttpClient httpClient = new HttpClient();
             uri = new URI("http", config.ipAddress, "/tstat", null);
-            HttpPost post = new HttpPost(uri);
+            Request request = httpClient.newRequest(uri);
+            request.method(HttpMethod.POST);
+            request.header("Content-Type", "application/json");
 
-            post.addHeader("Content-Type", "application/json");
+            // httpClient.newRequest(getURL(path)).timeout(config.getAsyncTimeout(), TimeUnit.SECONDS).method(POST)
+            // .onResponseSuccess(postExchange).onResponseFailure(postExchange) // .onComplete(postExchange)
+            // .content(new StringContentProvider(addSID(args), StandardCharsets.UTF_8)).send(postExchange);
+
+            // post.addHeader("Content-Type", "application/json");
 
             switch (channelUID.getId()) {
                 case CHANNEL_TMODE:
                     tstat.setTmode(TMode.valueOf(command.toString()));
-                    post.setEntity(new StringEntity("{\"tmode\" : " + tstat.getTmode().getValue() + "}"));
+                    request.content(new StringContentProvider("{\"tmode\" : " + tstat.getTmode().getValue() + "}"));
                     break;
                 case CHANNEL_FMODE:
                     tstat.setFmode(FMode.valueOf(command.toString()));
-                    post.setEntity(new StringEntity("{\"fmode\" : " + tstat.getFmode().getValue() + "}"));
+                    request.content(new StringContentProvider("{\"fmode\" : " + tstat.getFmode().getValue() + "}"));
                     break;
                 case CHANNEL_TARGET_HEAT:
                     tstat.setT_heat(((DecimalType) command).doubleValue());
-                    post.setEntity(new StringEntity("{\"it_heat\" : " + Double.toString(tstat.getT_heat()) + "}"));
+                    request.content(
+                            new StringContentProvider("{\"it_heat\" : " + Double.toString(tstat.getT_heat()) + "}"));
                     break;
                 case CHANNEL_TARGET_COOL:
                     tstat.setT_cool(((DecimalType) command).doubleValue());
-                    post.setEntity(new StringEntity("{\"it_cool\" : " + Double.toString(tstat.getT_cool()) + "}"));
+                    request.content(
+                            new StringContentProvider("{\"it_cool\" : " + Double.toString(tstat.getT_cool()) + "}"));
                     break;
                 case CHANNEL_HOLD:
                     tstat.setHold(command == OnOffType.ON ? 1 : 0);
-                    post.setEntity(new StringEntity("{\"hold\" : " + Integer.toString(tstat.getHold()) + "}"));
+                    request.content(
+                            new StringContentProvider("{\"hold\" : " + Integer.toString(tstat.getHold()) + "}"));
                     break;
             }
 
-            HttpResponse response = httpClient.execute(post);
+            ContentResponse response = request.send();
             logger.debug("Thermostat Response: " + response.toString());
         } catch (URISyntaxException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+        } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (ClientProtocolException e) {
+        } catch (TimeoutException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

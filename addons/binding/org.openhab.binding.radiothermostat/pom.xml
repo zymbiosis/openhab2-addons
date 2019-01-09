@@ -13,12 +13,4 @@
   <packaging>eclipse-plugin</packaging>
   
   <name>RadioThermostat Binding</name>
-
-  <dependencies>
-  	<dependency>
-  		<groupId>org.apache.httpcomponents</groupId>
-  		<artifactId>httpclient</artifactId>
-  		<version>4.3.6</version>
-  	</dependency>
-  </dependencies>
 </project>

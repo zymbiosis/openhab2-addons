@@ -3,5 +3,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="lib" path="C:/VSProjects/openhab2-addons/ws/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool/plugins/org.eclipse.jetty.client_9.4.11.v20180605.jar"/>
+	<classpathentry kind="lib" path="C:/VSProjects/openhab2-addons/ws/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool/plugins/org.eclipse.jetty.http_9.4.11.v20180605.jar"/>
+	<classpathentry kind="lib" path="C:/VSProjects/openhab2-addons/ws/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool/plugins/org.eclipse.jetty.util_9.4.11.v20180605.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
