@@ -40,8 +40,10 @@ public class RadioThermostatBindingConstants {
     // List of all Channel ids
     public static final String CHANNEL_TEMP_INDOOR = "tempIndoor";
     public static final String CHANNEL_TMODE = "tmode";
+    public static final String CHANNEL_TSTATE = "tstate";
     public static final String CHANNEL_HUMIDITY_INDOOR = "humidityIndoor";
     public static final String CHANNEL_FMODE = "fmode";
+    public static final String CHANNEL_FSTATE = "fstate";
     public static final String CHANNEL_OVERRIDE = "override";
     public static final String CHANNEL_HOLD = "hold";
     public static final String CHANNEL_TARGET_HEAT = "t_heat";
@@ -49,8 +51,8 @@ public class RadioThermostatBindingConstants {
 
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections.singleton(THING_TYPE_CT80);
     public static final Set<String> SUPPORTED_CHANNEL_IDS = Stream
-            .of(CHANNEL_TEMP_INDOOR, CHANNEL_TMODE, CHANNEL_HUMIDITY_INDOOR, CHANNEL_FMODE, CHANNEL_OVERRIDE,
-                    CHANNEL_HOLD, CHANNEL_TARGET_HEAT, CHANNEL_TARGET_COOL)
+            .of(CHANNEL_TEMP_INDOOR, CHANNEL_TMODE, CHANNEL_TSTATE, CHANNEL_HUMIDITY_INDOOR, CHANNEL_FMODE,
+                    CHANNEL_FSTATE, CHANNEL_OVERRIDE, CHANNEL_HOLD, CHANNEL_TARGET_HEAT, CHANNEL_TARGET_COOL)
             .collect(Collectors.toSet());
 
 }

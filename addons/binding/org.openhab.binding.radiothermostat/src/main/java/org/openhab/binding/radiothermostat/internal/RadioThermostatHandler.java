@@ -49,6 +49,7 @@ import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.radiothermostat.internal.models.FMode;
+import org.openhab.binding.radiothermostat.internal.models.FState;
 import org.openhab.binding.radiothermostat.internal.models.TMode;
 import org.openhab.binding.radiothermostat.internal.models.Tstat;
 import org.slf4j.Logger;
@@ -275,6 +276,8 @@ public class RadioThermostatHandler extends BaseThingHandler {
                 state = new StringType(value.toString());
             } else if (value instanceof FMode) {
                 state = new StringType(value.toString());
+            } else if (value instanceof FState) {
+                state = new StringType(value.toString());
             } else {
                 logger.warn("Update channel {}: Unsupported value type {}", channelId,
                         value.getClass().getSimpleName());
@@ -298,8 +301,12 @@ public class RadioThermostatHandler extends BaseThingHandler {
                     return tstat.getTemp();
                 case CHANNEL_TMODE:
                     return tstat.getTmode();
+                case CHANNEL_TSTATE:
+                    return tstat.getTstate();
                 case CHANNEL_FMODE:
                     return tstat.getFmode();
+                case CHANNEL_FSTATE:
+                    return tstat.getFstate();
                 case CHANNEL_OVERRIDE:
                     return tstat.getOverride();
                 case CHANNEL_HOLD:
