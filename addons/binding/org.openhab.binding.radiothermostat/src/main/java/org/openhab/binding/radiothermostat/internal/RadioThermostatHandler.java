@@ -103,6 +103,8 @@ public class RadioThermostatHandler extends BaseThingHandler {
         URI uri;
         try {
             HttpClient httpClient = new HttpClient();
+            httpClient.setConnectTimeout(60000);
+            httpClient.start();
             uri = new URI("http", config.ipAddress, "/tstat", null);
             Request request = httpClient.newRequest(uri);
             request.method(HttpMethod.POST);
@@ -152,6 +154,9 @@ public class RadioThermostatHandler extends BaseThingHandler {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (ExecutionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

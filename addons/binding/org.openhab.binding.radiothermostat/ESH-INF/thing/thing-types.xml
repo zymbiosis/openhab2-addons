@@ -52,22 +52,26 @@
         <item-type>Number</item-type>
         <label>Temperature</label>
         <description>Temperature</description>
+        <category>temperature</category>
         <state pattern="%.1f F"></state>
     </channel-type>
     <channel-type id="temperatureView">
         <item-type>Number</item-type>
         <label>Temperature</label>
         <description>Temperature</description>
+        <category>temperature</category>
         <state readOnly="true" pattern="%.1f F"></state>
     </channel-type>
 	<channel-type id="humidity">
 		<item-type>Number:Dimensionless</item-type>
 		<label>Humidity</label>
+		<category>humidity</category>
 		<state readOnly="true" pattern="%.2f %unit%" min="0.0" max="100"></state>
 	</channel-type>
     <channel-type id="tmode">
         <item-type>String</item-type>
         <label>Thermostat Mode</label>
+        <category>heating</category>
         <state>
             <options>
                 <option value="OFF">Off</option>
@@ -80,11 +84,12 @@
     <channel-type id="tmodeView">
         <item-type>String</item-type>
         <label>Thermostat Mode</label>
+        <category>heating</category>
         <state readOnly="true">
             <options>
                 <option value="OFF">Off</option>
-                <option value="HEAT">Heat</option>
-                <option value="COOL">Cool</option>
+                <option value="HEAT">Heating</option>
+                <option value="COOL">Cooling</option>
                 <option value="AUTO">Auto</option>
             </options>
         </state>
@@ -92,6 +97,7 @@
     <channel-type id="fmode">
         <item-type>String</item-type>
         <label>Fan Mode</label>
+        <category>fan</category>
         <state>
             <options>
                 <option value="AUTO">Auto</option>
@@ -103,6 +109,7 @@
     <channel-type id="onOff">
         <item-type>String</item-type>
         <label>On/Off</label>
+        <category>fan</category>
         <state readOnly="true">
             <options>
                 <option value="0">Off</option>
@@ -113,6 +120,7 @@
     <channel-type id="hold">
         <item-type>Switch</item-type>
         <label>Hold</label>
+        <category>lock</category>
     </channel-type>
 
 </thing:thing-descriptions>
