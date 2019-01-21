@@ -3,6 +3,7 @@ package org.openhab.binding.radiothermostat.internal.models;
 public class Tstat {
     private double lastUpdate = 0;
     private double temp;
+    private double humidity;
     private TMode tmode;
     private FMode fmode;
     private int override;
@@ -26,6 +27,14 @@ public class Tstat {
 
     public void setTemp(double temp) {
         this.temp = temp;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
     }
 
     public TMode getTmode() {

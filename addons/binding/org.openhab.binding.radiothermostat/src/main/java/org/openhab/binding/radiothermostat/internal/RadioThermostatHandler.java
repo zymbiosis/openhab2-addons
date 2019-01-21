@@ -56,6 +56,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 /**
@@ -68,11 +70,8 @@ import com.google.gson.JsonSyntaxException;
 public class RadioThermostatHandler extends BaseThingHandler {
 
     private final Logger logger = LoggerFactory.getLogger(RadioThermostatHandler.class);
-
     private ScheduledFuture<?> updateJob;
-
     private Gson gson;
-
     private Tstat tstat;
 
     @Nullable
@@ -122,7 +121,7 @@ public class RadioThermostatHandler extends BaseThingHandler {
                     request.content(new StringContentProvider("{\"tmode\" : " + tstat.getTmode().getValue() + "}"));
                     break;
                 case CHANNEL_FMODE:
-                    tstat.setFmode(FMode.valueOf(command.toString()));
+                    tstat.setFmode(FMode.fromInt(Integer.valueOf(command.toString())));
                     request.content(new StringContentProvider("{\"fmode\" : " + tstat.getFmode().getValue() + "}"));
                     break;
                 case CHANNEL_TARGET_HEAT:
@@ -221,6 +220,10 @@ public class RadioThermostatHandler extends BaseThingHandler {
     }
 
     private void getThermostatData() {
+        if (tstat.getLastUpdate() + CACHE_TIME >= System.currentTimeMillis()) {
+            return; // We've been here recently, so lets pass
+        }
+
         String errorMsg = null;
 
         try {
@@ -235,6 +238,23 @@ public class RadioThermostatHandler extends BaseThingHandler {
 
                 // Now convert the JSON string to an object
                 tstat = gson.fromJson(tstatResponse, Tstat.class);
+                tstat.setLastUpdate(System.currentTimeMillis());
+            } finally {
+                IOUtils.closeQuietly(connection.getInputStream());
+            }
+            // Lets go again and get the humidity
+            uri = new URI("http", config.ipAddress, "/tstat/humidity", null);
+            url = uri.toURL();
+            connection = url.openConnection();
+
+            try {
+                String tstatResponse = IOUtils.toString(connection.getInputStream());
+                logger.debug("TSTAT = {}", tstatResponse);
+
+                // Now convert the JSON string to an object
+                JsonParser parser = new JsonParser();
+                JsonObject obj = parser.parse(tstatResponse).getAsJsonObject();
+                tstat.setHumidity(obj.get("humidity").getAsDouble());
                 tstat.setLastUpdate(System.currentTimeMillis());
             } finally {
                 IOUtils.closeQuietly(connection.getInputStream());
@@ -304,14 +324,16 @@ public class RadioThermostatHandler extends BaseThingHandler {
             switch (fields[0]) {
                 case CHANNEL_TEMP_INDOOR:
                     return tstat.getTemp();
+                case CHANNEL_HUMIDITY_INDOOR:
+                    return tstat.getHumidity();
                 case CHANNEL_TMODE:
-                    return tstat.getTmode();
+                    return tstat.getTmode().getValue();
                 case CHANNEL_TSTATE:
-                    return tstat.getTstate();
+                    return tstat.getTstate().getValue();
                 case CHANNEL_FMODE:
-                    return tstat.getFmode();
+                    return tstat.getFmode().getValue();
                 case CHANNEL_FSTATE:
-                    return tstat.getFstate();
+                    return tstat.getFstate().getValue();
                 case CHANNEL_OVERRIDE:
                     return tstat.getOverride();
                 case CHANNEL_HOLD:

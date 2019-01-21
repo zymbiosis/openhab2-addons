@@ -1,18 +1,14 @@
-# <bindingName> Binding
+# RadioThermostat Binding
 
-_Give some details about what this binding is meant for - a protocol, system, specific device._
-
-_If possible, provide some resources like pictures, a YouTube video, etc. to give an impression of what can be done with this binding. You can place such resources into a `doc` folder next to this README.md._
+This binding integrates with RadioThermostat wifi-enabled smart thermostats. 
 
 ## Supported Things
 
-_Please describe the different supported things / devices within this section._
-_Which different types are supported, which models were tested etc.?_
-_Note that it is planned to generate some part of this based on the XML files within ```ESH-INF/thing``` of your binding._
+Currently this binding was only tested with the CT-80 version of the Radio Thermostat, but should work with other versions.
 
 ## Discovery
 
-_Describe the available auto-discovery features here. Mention for what it works and what needs to be kept in mind when using it._
+_WIP_
 
 ## Binding Configuration
 
@@ -33,20 +29,65 @@ _If your binding does not offer any generic configurations, you can remove this 
 
 ## Thing Configuration
 
-_Describe what is needed to manually configure a thing, either through the (Paper) UI or via a thing-file. This should be mainly about its mandatory and optional configuration parameters. A short example entry for a thing file can help!_
+The only information necessary is the IP address or hostname of your thermostat. Examples following will reference the default thing name of `tstat`.  Setting up the thing could be done like:
 
-_Note that it is planned to generate some part of this based on the XML files within ```ESH-INF/thing``` of your binding._
+```
+radiothermostat:ct80:tstat [ipAddress="192.168.1.10"]
+```
 
 ## Channels
 
-_Here you should provide information about available channel types, what their meaning is and how they can be used._
+Here is a list of all the supported channels:
 
-_Note that it is planned to generate some part of this based on the XML files within ```ESH-INF/thing``` of your binding._
+| Channel Type ID           | Item Type | Description                                                                                                      |
+|---------------------------|-----------|------------------------------------------------------------------------------------|
+| tempIndoor                | Number    | Indoor temperature as reported by the thermostat |
+| humidityIndoor            | Number    | Indoor humidity as reported by the thermostat (may be model specific)|
+| t_heat                    | Number    | Heat Target |
+| t_cool                    | Number    | Cool Target |
+| tMode                     | Number    | Thermostat Mode |
+| tState                    | Number    | The current Thermostat state|
+| fMode                     | Number    | Fan Mode |
+| fState                    | Number    | The current Fan state |
+| override                  | String    | Is the thermostat being overridden |
+| hold                      | Number    | Temperature Hold |
 
-## Full Example
+## Item Configuration
 
-_Provide a full usage example based on textual configuration files (*.things, *.items, *.sitemap)._
+tstat.items
 
-## Any custom content here!
+```
+Group Thermostat <heating> 
+Number rtsTempIndoor      "Inside Temp"      <temperature> (Thermostat) { channel="radiothermostat:ct80:tstat:tempIndoor" }
+Number rtsHumidityIndoor  "Inside Humidity"  <humidity>    (Thermostat) { channel="radiothermostat:ct80:tstat:humidityIndoor" }
+Number rtsT_heat          "Target Heat"      <fire>        (Thermostat) { channel="radiothermostat:ct80:tstat:t_heat" }
+Number rtsT_cool          "Target Cool"      <snow>        (Thermostat) { channel="radiothermostat:ct80:tstat:t_cool" }
+Number rtsTmode           "Mode [%s]"        <heating>     (Thermostat) { channel="radiothermostat:ct80:tstat:tmode" } 
+Number rtsTstate          "State [%s]"       <heating>     (Thermostat) { channel="radiothermostat:ct80:tstat:tstate" }
+Number rtsFmode           "Fan Mode [%s]"    <fan>         (Thermostat) { channel="radiothermostat:ct80:tstat:fmode" } 
+Number rtsFstate          "Fan State [%s]"   <fan>         (Thermostat) { channel="radiothermostat:ct80:tstat:fstate" }
+Switch rtsHold            "Hold"             <switch>      (Thermostat) { channel="radiothermostat:ct80:tstat:hold" }
+Number rtsOverride        "Override [%s]"                  (Thermostat) { channel="radiothermostat:ct80:tstat:override" }
+```
 
-_Feel free to add additional sections for whatever you think should also be mentioned about your binding!_
+## Sitemap Configuration
+
+tstat.sitemap
+
+```
+sitemap tstat label="Thermostat"
+{
+    Frame {
+        Text item=rtsTempIndoor
+        Text item=rtsHumidityIndoor
+        Setpoint item=rtsT_heat
+        Setpoint item=rtsT_cool
+        Switch item=rtsTmode mappings=[0='Off',1='Heat',2='Cool',3='Auto']
+        Text item=rtsTstate
+        Switch item=rtsFmode mappings=[0='Auto',1='Circ',2='On']
+        Text item=rtsFstate
+        Switch item=rtsHold
+        Text item=rtsOverride
+    }
+}
+```

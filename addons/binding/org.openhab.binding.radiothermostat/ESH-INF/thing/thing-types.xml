@@ -22,7 +22,9 @@
             <channel typeId="tmodeView" id="tstate">
                 <label>Current State</label>
             </channel>
-            <channel typeId="fmode" id="fmode"></channel>
+            <channel typeId="fmode" id="fmode">
+                <label>Fan Mode</label>
+            </channel>
             <channel typeId="onOff" id="fstate">
                 <label>Fan State</label>
             </channel>
@@ -66,48 +68,48 @@
 		<item-type>Number:Dimensionless</item-type>
 		<label>Humidity</label>
 		<category>humidity</category>
-		<state readOnly="true" pattern="%.2f %unit%" min="0.0" max="100"></state>
+		<state readOnly="true" pattern="%.0f%%" min="0.0" max="100"></state>
 	</channel-type>
     <channel-type id="tmode">
-        <item-type>String</item-type>
+        <item-type>Number</item-type>
         <label>Thermostat Mode</label>
         <category>heating</category>
         <state>
             <options>
-                <option value="OFF">Off</option>
-                <option value="HEAT">Heat</option>
-                <option value="COOL">Cool</option>
-                <option value="AUTO">Auto</option>
+                <option value="0">Off</option>
+                <option value="1">Heat</option>
+                <option value="2">Cool</option>
+                <option value="3">Auto</option>
             </options>
         </state>
     </channel-type>
     <channel-type id="tmodeView">
-        <item-type>String</item-type>
+        <item-type>Number</item-type>
         <label>Thermostat Mode</label>
         <category>heating</category>
         <state readOnly="true">
             <options>
-                <option value="OFF">Off</option>
-                <option value="HEAT">Heating</option>
-                <option value="COOL">Cooling</option>
-                <option value="AUTO">Auto</option>
+                <option value="0">Off</option>
+                <option value="1">Heating</option>
+                <option value="2">Cooling</option>
+                <option value="3">Auto</option>
             </options>
         </state>
     </channel-type>
     <channel-type id="fmode">
-        <item-type>String</item-type>
+        <item-type>Number</item-type>
         <label>Fan Mode</label>
         <category>fan</category>
         <state>
             <options>
-                <option value="AUTO">Auto</option>
-                <option value="CIRC">Auto/Circulate</option>
-                <option value="ON">On</option>
+                <option value="0">Auto</option>
+                <option value="1">Circulate</option>
+                <option value="2">On</option>
             </options>
         </state>
     </channel-type>
     <channel-type id="onOff">
-        <item-type>String</item-type>
+        <item-type>Number</item-type>
         <label>On/Off</label>
         <category>fan</category>
         <state readOnly="true">
