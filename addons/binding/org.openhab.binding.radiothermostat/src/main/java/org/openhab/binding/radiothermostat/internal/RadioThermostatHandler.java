@@ -16,6 +16,7 @@ import static org.openhab.binding.radiothermostat.internal.RadioThermostatBindin
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -26,6 +27,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import javax.measure.quantity.Temperature;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -38,7 +41,9 @@ import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.types.StringType;
+import org.eclipse.smarthome.core.library.unit.ImperialUnits;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -125,12 +130,14 @@ public class RadioThermostatHandler extends BaseThingHandler {
                     request.content(new StringContentProvider("{\"fmode\" : " + tstat.getFmode().getValue() + "}"));
                     break;
                 case CHANNEL_TARGET_HEAT:
-                    tstat.setT_heat(((DecimalType) command).doubleValue());
+                    tstat.setT_heat(((QuantityType<Temperature>) command).toUnit(ImperialUnits.FAHRENHEIT)
+                            .toBigDecimal().setScale(0, RoundingMode.HALF_UP).doubleValue());
                     request.content(
                             new StringContentProvider("{\"it_heat\" : " + Double.toString(tstat.getT_heat()) + "}"));
                     break;
                 case CHANNEL_TARGET_COOL:
-                    tstat.setT_cool(((DecimalType) command).doubleValue());
+                    tstat.setT_cool(((QuantityType<Temperature>) command).toUnit(ImperialUnits.FAHRENHEIT)
+                            .toBigDecimal().setScale(0, RoundingMode.HALF_UP).doubleValue());
                     request.content(
                             new StringContentProvider("{\"it_cool\" : " + Double.toString(tstat.getT_cool()) + "}"));
                     break;
@@ -295,6 +302,8 @@ public class RadioThermostatHandler extends BaseThingHandler {
                 state = new DecimalType((BigDecimal) value);
             } else if (value instanceof Integer) {
                 state = new DecimalType(BigDecimal.valueOf(((Integer) value).longValue()));
+            } else if (value instanceof QuantityType) {
+                state = new QuantityType<Temperature>(value.toString()).toUnit(ImperialUnits.FAHRENHEIT);
             } else if (value instanceof String) {
                 state = new StringType(value.toString());
             } else if (value instanceof TMode) {
@@ -323,7 +332,7 @@ public class RadioThermostatHandler extends BaseThingHandler {
         if (tstat != null) {
             switch (fields[0]) {
                 case CHANNEL_TEMP_INDOOR:
-                    return tstat.getTemp();
+                    return new QuantityType<>(tstat.getTemp(), ImperialUnits.FAHRENHEIT);
                 case CHANNEL_HUMIDITY_INDOOR:
                     return tstat.getHumidity();
                 case CHANNEL_TMODE:
@@ -339,9 +348,9 @@ public class RadioThermostatHandler extends BaseThingHandler {
                 case CHANNEL_HOLD:
                     return tstat.getHold();
                 case CHANNEL_TARGET_HEAT:
-                    return tstat.getT_heat();
+                    return new QuantityType<>(tstat.getT_heat(), ImperialUnits.FAHRENHEIT);
                 case CHANNEL_TARGET_COOL:
-                    return tstat.getT_cool();
+                    return new QuantityType<>(tstat.getT_cool(), ImperialUnits.FAHRENHEIT);
             }
         }
 

@@ -51,18 +51,18 @@
 
 	<!--Channel Types-->
     <channel-type id="temperature">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Temperature</label>
         <description>Temperature</description>
         <category>temperature</category>
-        <state pattern="%.1f F"></state>
+        <state pattern="%.1f %unit%"></state>
     </channel-type>
     <channel-type id="temperatureView">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Temperature</label>
         <description>Temperature</description>
         <category>temperature</category>
-        <state readOnly="true" pattern="%.1f F"></state>
+        <state readOnly="true" pattern="%.1f %unit%"></state>
     </channel-type>
 	<channel-type id="humidity">
 		<item-type>Number:Dimensionless</item-type>
