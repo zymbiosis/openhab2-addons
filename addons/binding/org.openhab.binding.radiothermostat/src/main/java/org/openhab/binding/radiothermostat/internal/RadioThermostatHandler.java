@@ -122,7 +122,7 @@ public class RadioThermostatHandler extends BaseThingHandler {
 
             switch (channelUID.getId()) {
                 case CHANNEL_TMODE:
-                    tstat.setTmode(TMode.valueOf(command.toString()));
+                    tstat.setTmode(TMode.fromInt(Integer.valueOf(command.toString())));
                     request.content(new StringContentProvider("{\"tmode\" : " + tstat.getTmode().getValue() + "}"));
                     break;
                 case CHANNEL_FMODE:

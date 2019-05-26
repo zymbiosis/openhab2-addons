@@ -1,5 +1,8 @@
 package org.openhab.binding.radiothermostat.internal.models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.annotations.SerializedName;
 
 public enum TMode {
@@ -24,5 +27,17 @@ public enum TMode {
 
     public int getValue() {
         return value;
+    }
+
+    private static final Map<Integer, TMode> intToTypeMap = new HashMap<Integer, TMode>();
+    static {
+        for (TMode type : TMode.values()) {
+            intToTypeMap.put(type.value, type);
+        }
+    }
+
+    public static TMode fromInt(int i) {
+        TMode type = intToTypeMap.get(Integer.valueOf(i));
+        return type;
     }
 }
