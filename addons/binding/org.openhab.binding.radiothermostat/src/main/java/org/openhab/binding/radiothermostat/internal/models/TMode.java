@@ -5,6 +5,11 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Class for handling the Thermostat Mode
+ *
+ * @author John M. Gardner - Initial contribution
+ */
 public enum TMode {
     @SerializedName("0")
     OFF(0),

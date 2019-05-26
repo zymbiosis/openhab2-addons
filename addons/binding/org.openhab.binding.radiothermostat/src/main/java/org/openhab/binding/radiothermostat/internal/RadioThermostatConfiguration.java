@@ -20,7 +20,7 @@ package org.openhab.binding.radiothermostat.internal;
 public class RadioThermostatConfiguration {
 
     /**
-     * Sample configuration parameter. Replace with your own.
+     * IP Address of the radio thermostat
      */
     public String ipAddress;
 }

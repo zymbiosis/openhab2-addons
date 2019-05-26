@@ -5,6 +5,11 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Class for handilng the Fan Mode
+ *
+ * @author John M. Gardner - Initial contribution
+ */
 public enum FMode {
     @SerializedName("0")
     AUTO(0),

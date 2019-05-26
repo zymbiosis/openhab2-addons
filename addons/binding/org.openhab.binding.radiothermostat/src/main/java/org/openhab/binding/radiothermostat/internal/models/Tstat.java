@@ -1,5 +1,10 @@
 package org.openhab.binding.radiothermostat.internal.models;
 
+/**
+ * Main class for tracking thermostat details
+ *
+ * @author John M. Gardner - Initial contribution
+ */
 public class Tstat {
     private double lastUpdate = 0;
     private double temp;
